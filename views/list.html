@@ -1,0 +1,48 @@
+<div class="panel panel-default" ng-controller="ListController">
+  <div class="navbar navbar-info">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-material-light-blue-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">GitHub Search</a>
+      </div>
+      <form class="navbar-form navbar-right">
+        <div class="form-group">
+          <input type="text" class="form-control col-md-8" ng-model="keyword" placeholder="Search Repositories">
+          <a class="btn btn-default btn-fab btn-fab-mini" ng-click="fetchContributors(keyword)">
+            <i class="material-icons">search</i>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-body col-md-6 col-md-offset-3">
+    <div class="panel panel-default">
+      <div class="panel-body" ng-if="status">{{status}}</div>
+    </div>
+    <div class="list-group" ng-if="users.length">
+      <div class="list-group-item" ng-repeat="user in users | startFrom: currentPage*pageSize | limitTo: pageSize">
+        <div class="row-action-primary">
+          <img class="img-circle" ng-src="{{user.avatar_url}}">
+        </div>
+        <div class="row-content">
+          <div class="least-content">
+            <a class="btn btn-raised btn-info btn-xs" ng-click="follow($index, user.login)">Follow</a>
+          </div>
+          <h4 class="list-group-item-heading">{{user.login}}</h4>
+
+          <p class="list-group-item-text">Total Contributions - {{user.contributions}}</p>
+        </div>
+        <div class="list-group-separator"></div>
+      </div>
+      <button class="btn btn-warning" ng-disabled="currentPage == 0" ng-click="currentPage = currentPage - 1">Previous</button>
+       {{currentPage+1}}/{{numberOfPages()}}
+       <button class="btn btn-warning" ng-disabled="currentPage >= total/pageSize - 1" ng-click="currentPage = currentPage + 1">Next</button>
+     </div>
+  </div>
+
+</div>
