@@ -1,6 +1,6 @@
 # github search
 
-A simple github search application with bootstrap material design created as a F22 Labs Task.
+A simple github search application with bootstrap material design.
 
 ***DONE***
 -> Implemented search to find repositories
