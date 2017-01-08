@@ -2,20 +2,17 @@
 
 A simple github search application with bootstrap material design.
 
-***DONE***
--> Implemented search to find repositories
--> Fetching the contributors (users) for a repository
--> Pagination
+***Features***
+- Implemented search to find repositories
+- Fetching the contributors (users) for a repository
+- Pagination
+- Authorization
+- Follow user
+- ***Follow All users at once***
 
-***NOT DONE***
--> Follow option on a user as it requires authorization
-(Reason - Didn't had much time to proceed due to frequent internet disconnection)
 
-
-/**** To Run the project /****
-  Using Node.js (npm serve)
-        (or)
-    WAMP server
+***To Run the project***
+ - Using Node.js (npm serve) / WAMP server
 
 
 ***Frameworks or Libraries Used***
