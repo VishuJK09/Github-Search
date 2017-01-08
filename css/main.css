@@ -1,1 +1,8 @@
+.repos {
+  overflow: auto;
+  height: 500px;
+}
 
+.cursor {
+  cursor: pointer;
+}

@@ -1,5 +1,5 @@
-<div class="panel panel-default" ng-controller="ListController">
-  <div class="navbar navbar-info">
+<div ng-controller="ListController">
+  <div class="navbar navbar-info fixed">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-material-light-blue-collapse">
@@ -9,40 +9,65 @@
         </button>
         <a class="navbar-brand">GitHub Search</a>
       </div>
-      <form class="navbar-form navbar-right">
+      <form class="navbar-form navbar-right" ng-submit="reposPageCount = 1; fetchRepos(keyword)">
         <div class="form-group">
           <input type="text" class="form-control col-md-8" ng-model="keyword" placeholder="Search Repositories">
-          <a class="btn btn-default btn-fab btn-fab-mini" ng-click="fetchContributors(keyword)">
+          <a class="btn btn-default btn-fab btn-fab-mini" ng-click="reposPageCount = 1; fetchRepos(keyword)">
             <i class="material-icons">search</i>
+          </a>
+          <a class="btn btn-raised btn-default btn-xs" ng-if="users.length" ng-click="followAll()">Follow All</a>
+          <a class="btn btn-raised btn-default btn-xs" ng-click="authenticate()">
+            <i class="fa fa-github" aria-hidden="true"></i> Github Login
           </a>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="panel panel-body col-md-6 col-md-offset-3">
-    <div class="panel panel-default">
-      <div class="panel-body" ng-if="status">{{status}}</div>
+  <div class="row">
+    <div class="panel panel-body repos col-md-3 col-md-offset-1" ng-show="repos.items.length">
+      <table id="repos" class="table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th><small>{{repos.total_count}} - </small> Repositories</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="repo in repos.items">
+          <td>{{$index + 1}}</td>
+          <td><a class="cursor" ng-click="fetchContributors(repo.contributors_url, 1)">{{repo.name}}</a></td>
+        </tr>
+        </tbody>
+      </table>
+      <strong><small class="pull-right">Page {{reposPageCount - 1}}</small></strong>
+      <button class="btn btn-sm btn-default" ng-disabled="repos.items.length < 30" ng-click="fetchRepos(keyword)">Next Page</button>
     </div>
-    <div class="list-group" ng-if="users.length">
-      <div class="list-group-item" ng-repeat="user in users | startFrom: currentPage*pageSize | limitTo: pageSize">
-        <div class="row-action-primary">
-          <img class="img-circle" ng-src="{{user.avatar_url}}">
-        </div>
-        <div class="row-content">
-          <div class="least-content">
-            <a class="btn btn-raised btn-info btn-xs" ng-click="follow($index, user.login)">Follow</a>
-          </div>
-          <h4 class="list-group-item-heading">{{user.login}}</h4>
 
-          <p class="list-group-item-text">Total Contributions - {{user.contributions}}</p>
+    <div class="panel panel-body col-md-6 col-md-offset-1">
+      <blockquote ng-if="status">
+        <small>{{status}}</small>
+      </blockquote>
+      <div class="list-group" ng-if="users.length">
+        <div class="list-group-item" ng-repeat="user in users">
+          <div class="row-action-primary">
+            <img class="img-circle" ng-src="{{user.avatar_url}}">
+          </div>
+          <div class="row-content">
+            <div class="least-content">
+              <a class="btn btn-raised btn-info btn-xs" ng-model="user.follow" ng-init="user.follow = 'Follow'"
+              ng-disabled="user.follow == 'Unfollow'" ng-click="follow($index, user.login)">{{user.follow}}</a>
+            </div>
+            <h4 class="list-group-item-heading">{{user.login}}</h4>
+
+            <p class="list-group-item-text">Total Contributions - {{user.contributions}}</p>
+          </div>
+          <div class="list-group-separator"></div>
         </div>
-        <div class="list-group-separator"></div>
+        <button class="btn btn-warning" ng-disabled="currentPage == 1" ng-click="currentPage = currentPage - 1; paginate(currentPage)">Previous</button>
+        <button class="btn btn-warning pull-right" ng-disabled="users.length < 10" ng-click="currentPage = currentPage + 1; paginate(currentPage)">Next</button>
       </div>
-      <button class="btn btn-warning" ng-disabled="currentPage == 0" ng-click="currentPage = currentPage - 1">Previous</button>
-       {{currentPage+1}}/{{numberOfPages()}}
-       <button class="btn btn-warning" ng-disabled="currentPage >= total/pageSize - 1" ng-click="currentPage = currentPage + 1">Next</button>
-     </div>
+    </div>
   </div>
 
 </div>
